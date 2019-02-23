@@ -1,3 +1,4 @@
+# draws random squares, using PEN1
 import time
 import random
 import serial
@@ -40,7 +41,11 @@ with serial.Serial(port, speed, timeout=None) as plt:
     for i in range(100):
         body = random_square()
         for line in body:
+            # TODO: we can sent more commands at one, to be exact, bufferlen
+            # size (Esc-B) returns bufferlen
             plt.write(line)
+            # For every line sent, end with OA, which reports back current
+            # position on the pen
             plt.write("OA;")
             c = ""
             data = ""
@@ -49,4 +54,6 @@ with serial.Serial(port, speed, timeout=None) as plt:
                 data += c
                 print("read: {}".format(map(ord, c)))
             print("OA return: {}".format(data))
+            # We got data, mean OA got executed, so the instruction buffer
+            # is all consumed, ready to sent more.
     plt.write("SP0;")
