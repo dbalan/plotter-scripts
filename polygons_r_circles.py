@@ -6,16 +6,15 @@ import math
 
 MARGIN = 100
 
-def circle_points(cx, cy, radius, arc=5):
+def circle_points(cx, cy, radius, rotation=0, arc=5):
     """Generates 360/arc points on the circumference of a circle"""
     steps = int(360.0 / arc) + 1
-    for deg in np.linspace(0, 360, steps):
+    for deg in np.linspace(0 + rotation, 360 + rotation, steps):
         yield (int(cx + radius * math.cos(deg * 2 * math.pi / 360)),
                int(cy + radius * math.sin(deg * 2 * math.pi / 360)))
 
-def circle(cx, cy, radius, arc=5):
-    current = circle_points(cx, cy, radius, arc=arc)
-
+def circle(cx, cy, radius, rotation=0, arc=5):
+    current = circle_points(cx, cy, radius, rotation=rotation, arc=arc)
     instructions = []
 
     (first_x, first_y) = next(current)
@@ -27,6 +26,10 @@ def circle(cx, cy, radius, arc=5):
     instructions.append("PD{},{};".format(first_x, first_y))
     instructions.append("PU;")
     return instructions
+
+def square(cx, cy, size, rotation=45):
+    """Draws square centered at (cx, cy) with side length size"""
+    return circle(cx, cy, size / math.sqrt(2), rotation=rotation, arc=90)
 
 def random_circle(bound_x, bound_y):
     """Returns hpgl intructions for random circle within the given bounds"""
