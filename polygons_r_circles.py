@@ -36,23 +36,24 @@ def random_circle(bound_x, bound_y):
     steps = 360.0 / random.randint(3,12)
     return circle(cx, cy, radius, arc = steps)
 
-port = "/dev/ttyUSB0"
-speed = 9600
+if __name__ == "__main__":
+    port = "/dev/ttyUSB0"
+    speed = 9600
 
-with serial.Serial(port, speed, timeout=None) as plt:
-    #send initialization instructions
-    plt.write("IN;PU;SP1;")
+    with serial.Serial(port, speed, timeout=None) as plt:
+        #send initialization instructions
+        plt.write("IN;PU;SP1;")
 
-    for i in range(50):
-        figure = random_circle(10000, 7200)
-        for line in figure:
-            plt.write(line)
-            
-            #send a blocking isnstruction, to know when pen has stopped
-            plt.write("OA;")
-            c = ""
-            while c != "\r":
-                c = plt.read()
+        for i in range(50):
+            figure = random_circle(10000, 7200)
+            for line in figure:
+                plt.write(line)
+                
+                #send a blocking isnstruction, to know when pen has stopped
+                plt.write("OA;")
+                c = ""
+                while c != "\r":
+                    c = plt.read()
 
-    #Finally, put back the pen
-    plt.write("SP0;")
+        #Finally, put back the pen
+        plt.write("SP0;")
