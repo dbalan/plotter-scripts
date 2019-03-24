@@ -9,7 +9,9 @@ from bday import text
 from polygons_r_circles import circle_points, circle
 
 def hallygon(cx, cy, radius, sides, disp_x, disp_y, end_rad, end_rot, steps = 15):
-    """Draws steps number of squares interpolated between start and end"""
+    """Draws a number of polygons interpolated between one centered at cx, cy
+    with size radius and one displaced by disp_x, disp_y with size end_rad. 
+    """
     instructions = []
     x_series = np.geomspace(cx, cx + disp_x, steps)
     y_series = np.geomspace(cy, cy + disp_y, steps)
