@@ -22,9 +22,7 @@ def stitch(body, buflen=40):
     yield "".join(buf)
 
 # cmds is a list with semicolon attached to the command
-def exec_hpgl(cmds):
-    port = "/dev/cuaU0"
-    speed = 9600
+def exec_hpgl(cmds, port="/dev/ttyUSB0", speed=9600):
 
     body = stitch(cmds)
     with serial.Serial(port, speed, timeout=None) as plt:
@@ -45,3 +43,8 @@ def exec_hpgl(cmds):
             # We got data, mean OA got executed, so the instruction buffer
             # is all consumed, ready to sent more.
 
+def write_hpgl(cmds, filename):
+    body = stitch(cmds)
+    with open(filename, "w") as f:
+        for ins in body:
+            f.write(ins)
