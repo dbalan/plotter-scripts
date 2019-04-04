@@ -4,18 +4,18 @@ import numpy as np
 import math 
 
 from common import stitch, exec_hpgl 
-from polygons_r_circles import circle, circle_points
+from polygons import circle, circle_points
 
 CHAR_WIDTH = 100
 
-def random_nonoverlap_circle(outer_bounds, inner_bounds):
+def random_nonoverlap_circle(outer_bounds, inner_bounds, random_range):
     """Returns hpgl intructions for random circle within the given bounds"""
     (low_left_x, low_left_y, up_right_x, up_right_y) = outer_bounds
     (inner_low_x, inner_low_y, inner_high_x, inner_high_y) = inner_bounds
     instructions = dot_bound(*outer_bounds)
     instructions = dot_bound(*inner_bounds)
 
-    radius = random.randint(100, 400)
+    radius = random.randint(*random_range)
 
     #if circle will overlap with text, shift right
     cx = random.randint(low_left_x + radius, up_right_x - radius)

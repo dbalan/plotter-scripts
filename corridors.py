@@ -1,12 +1,13 @@
-import time
 import numpy as np
 import random
-import serial
 import math
+from collections import namedtuple
 
 import common
 from bday import text
-from polygons_r_circles import circle_points, circle
+from polygons import circle_points, circle
+
+Point = namedtuple("Point", ("x", "y"))
 
 def hallygon(cx, cy, radius, sides, disp_x, disp_y, end_rad, end_rot, steps = 15):
     """Draws a number of polygons interpolated between one centered at cx, cy
@@ -19,7 +20,9 @@ def hallygon(cx, cy, radius, sides, disp_x, disp_y, end_rad, end_rot, steps = 15
     rot_series = np.linspace(45, end_rot, steps)
 
     for (x, y, rad, rot) in zip(x_series, y_series, rad_series, rot_series):
-        instructions.extend(circle(x, y, rad, rotation=rot, arc = 360/sides))
+        instructions.extend(circle(Point(x, y),
+                                   rad, rotation=rot, 
+                                   arc = 360/sides))
 
     return instructions
 
