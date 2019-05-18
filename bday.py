@@ -75,7 +75,7 @@ if __name__ == "__main__":
     cmds.extend(["SP1;"])
 
     for i in range(50):
-        current_circle = random_nonoverlap_circle(card_bounds, text_bounds)
+        current_circle = random_nonoverlap_circle(card_bounds, text_bounds, random_range=(1, 10))
         print(current_circle)
         cmds.extend(current_circle)
 
