@@ -1,16 +1,18 @@
-import numpy as np
-import random
 import math
 from collections import namedtuple
 
+import numpy as np
+
 import common
 from bday import text
-from polygons import circle_points, circle
+from polygons import circle
 
 Point = namedtuple("Point", ("x", "y"))
 
-def hallygon(cx, cy, radius, sides, disp_x, disp_y, end_rad, end_rot, steps = 15):
-    """Draws a number of polygons interpolated between one centered at cx, cy
+
+def hallygon(cx, cy, radius, sides, disp_x, disp_y, end_rad, end_rot, steps=15):
+    """
+    Draws a number of polygons interpolated between one centered at cx, cy
     with size radius and one displaced by disp_x, disp_y with size end_rad. 
     """
     instructions = []
@@ -21,10 +23,11 @@ def hallygon(cx, cy, radius, sides, disp_x, disp_y, end_rad, end_rot, steps = 15
 
     for (x, y, rad, rot) in zip(x_series, y_series, rad_series, rot_series):
         instructions.extend(circle(Point(x, y),
-                                   rad, rotation=rot, 
-                                   arc = 360/sides))
+                                   rad, rotation=rot,
+                                   arc=360 / sides))
 
     return instructions
+
 
 def is_prime(num):
     """Tests if num is prime"""
@@ -38,6 +41,7 @@ def is_prime(num):
                 return False
     return True
 
+
 if __name__ == "__main__":
     port = "/dev/ttyUSB0"
     speed = 9600
@@ -46,7 +50,7 @@ if __name__ == "__main__":
     DEFAULT_SIZE = 575
     DEV = 250
     size = DEFAULT_SIZE
-    spacing = size/(math.sqrt(2))
+    spacing = size / (math.sqrt(2))
     margin = size + DEV
     instructions.extend(text("hallygons", size - 200, size - 200))
     deviation_x = np.linspace(-DEV, DEV, 23)
@@ -69,7 +73,7 @@ if __name__ == "__main__":
 
             instructions.extend(hallygon(cx, cy, size, sides,
                                          dev_x, dev_y, 60,
-                                         end_rot = rot, steps = 4))
+                                         end_rot=rot, steps=4))
 
     common.exec_hpgl(instructions, port=port, speed=speed)
-    #common.write_hpgl(instructions, "hallway.hpgl")
+    # common.write_hpgl(instructions, "hallway.hpgl")
