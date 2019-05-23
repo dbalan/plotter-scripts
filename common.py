@@ -1,12 +1,13 @@
 import serial
 
+
 # combine command together with maxlen buflen and expose as an iterator
 def stitch(body, buflen=40):
     start = ["IN;PU;", "SP1;"]
     end = ["SP0;"]
     final = start + body + end
 
-    ## read in 20 bytes at a time or boundary
+    # read in 20 bytes at a time or boundary
     count = 0
     buf = []
     for ins in final:
@@ -21,9 +22,9 @@ def stitch(body, buflen=40):
     # send rest of the code
     yield "".join(buf)
 
+
 # cmds is a list with semicolon attached to the command
 def exec_hpgl(cmds, port="/dev/ttyUSB0", speed=9600):
-
     body = stitch(cmds)
     with serial.Serial(port, speed, timeout=None) as plt:
         for ins in body:
@@ -42,6 +43,7 @@ def exec_hpgl(cmds, port="/dev/ttyUSB0", speed=9600):
             print("OA return: {}".format(data))
             # We got data, mean OA got executed, so the instruction buffer
             # is all consumed, ready to sent more.
+
 
 def write_hpgl(cmds, filename):
     body = stitch(cmds)
